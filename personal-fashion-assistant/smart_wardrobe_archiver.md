@@ -46,6 +46,11 @@ author: "Yuna"
 若已存在：跳过创建，准备在末尾追加数据。
 
 # 3. Execution Logic (执行逻辑)
+
+> 🚨 **批量处理规则 (Batch Processing Rule)**：
+> 如果用户一次性批量上传了多张图片，Agent必须对每张图片**逐一**串行执行完整的【Step 1 ~ Step 5】循环流程。
+> 即：必须在当前图片完成预处理、模型解析、用户确认、入库归档及最后的 `cleanup_temp()` 清理后，才能开始处理下张图片。严禁同时调用工具预处理所有图片，否则会导致临时存储文件被覆盖。每张图片处理完成后，再进入下一张的处理流程。
+
 ## Step 1: Image Processing (图像预处理)
 接收用户上传的原始图片，统一重命名为temp_processing[后缀]。
 将其存入本地目录：./smart_wardrobe/temp_upload/。
