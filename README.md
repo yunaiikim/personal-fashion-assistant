@@ -3,15 +3,15 @@ Elevate your daily style with a smart wardrobe management system built on OpenCl
 
 
 # ✨ Key Features
-## 🎨 Personalized Profiling
+### 🎨 Personalized Profiling
 Input your body measurements and skin tone data to unlock style advice that truly fits you.
-## 👗 Digital Wardrobe Management
+### 👗 Digital Wardrobe Management
 Full CRUD capabilities (Add, View, Edit, Delete) for your clothing items.
-## 🔍 Conflict Detection
+### 🔍 Conflict Detection
 Automatic detection of color clashes, style mismatches, and occasion-inappropriate combos.
-## 📊 Wardrobe Analytics
+### 📊 Wardrobe Analytics
 Visualize clothing usage and track your style evolution with detailed statistics.
-## 🤖 Smart Daily Recommendations
+### 🤖 Smart Daily Recommendations
 AI-powered outfit suggestions based on weather, occasion, and preferences.
 
 # 🔌 Installation & Integration
@@ -22,9 +22,9 @@ Move Files: Copy the skill module into your workspace/skills directory.
 
 # 📄 License & Community Spirit
 This project is licensed under the Apache License 2.0.
-## ⚠️ Author's Note on Commercial Use
+### ⚠️ Author's Note on Commercial Use
 While the Apache 2.0 license legally permits commercial use, the author personally does not recommend it. This project is intended as a shared resource for personal style enhancement and community learning.
-## 🌸 Call to Contribution
+### 🌸 Call to Contribution
 The intelligence of these skills depends on our collective wisdom. We invite all sisters and fashion enthusiasts to contribute, share, and refine these tools together. 
 Let's make this assistant smarter, more perfect, and more intuitive through our joint efforts!
 
