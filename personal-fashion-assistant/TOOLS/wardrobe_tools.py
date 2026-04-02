@@ -52,10 +52,10 @@ class WardrobeManager:
         if not os.path.exists(self.inventory_file):
             with open(self.inventory_file, "w", encoding="utf-8") as f:
                 f.write(
-                    "| 分类 | 衣物编号 | 主要颜色 | 材质 | 风格 | 适宜的温度 | 适合的场景 | 当日日期 |\n"
+                    "| 分类 | 衣物编号 | 衣物名称 | 主要颜色 | 材质 | 风格 | 适宜的温度 | 推荐季节 | 适合的场景 | 当日日期 | 衣物状态 |\n"
                 )
                 f.write(
-                    "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n"
+                    "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n"
                 )
             return {"status": "created", "message": "索引文件已创建并写入表头","inventory_file": os.path.abspath(self.inventory_file)}
         return {"status": "exists", "message": "环境已就绪，索引文件已存在", "inventory_file": os.path.abspath(self.inventory_file)}
@@ -417,10 +417,10 @@ class WardrobeManager:
         with open(self.inventory_file, "a", encoding="utf-8") as f:
             if not file_exists:
                 f.write(
-                    "| 分类 | 衣物编号 | 主要颜色 | 材质 | 风格 | 适宜的温度 | 适合的场景 | 当日日期 |\n"
+                    "| 分类 | 衣物编号 | 衣物名称 | 主要颜色 | 材质 | 风格 | 适宜的温度 | 推荐季节 | 适合的场景 | 当日日期 | 衣物状态 |\n"
                 )
                 f.write(
-                    "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n"
+                    "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n"
                 )
             f.write(markdown_row.strip() + "\n")
 
@@ -469,7 +469,7 @@ if __name__ == "__main__":
     _print_section("Test 2: 单行归档")
     # 模拟图片已通过 receive_image 存入 temp_upload
     _create_dummy_image("./smart_wardrobe/temp_upload/temp_processing.jpg")
-    mock_md = "| 上衣 | TEST12345678 | 白色 | 纯棉 | 极简 | 20°C | 休闲 | 2026-03-30 |"
+    mock_md = "| 上衣 | TEST12345678 | 纯白T恤 | 白色 | 纯棉 | 极简 | 20°C | 春秋 | 休闲 | 2026-03-30 | 正常使用 |"
     result = wm.archive_items_batch(mock_md)
     print(f"归档结果: {result}")
     # 验证: wardrobe_data/ 下应有 TEST12345678.jpg
@@ -481,7 +481,7 @@ if __name__ == "__main__":
     # ──────────────────────────────────────────────
     _print_section("Test 3: 编号冲突")
     _create_dummy_image("./smart_wardrobe/temp_upload/temp_processing.jpg")
-    conflict_md = "| 上衣 | TEST12345678 | 黑色 | 涤纶 | 运动 | 15°C | 户外 | 2026-03-30 |"
+    conflict_md = "| 上衣 | TEST12345678 | 运动外套 | 黑色 | 涤纶 | 运动 | 15°C | 秋季 | 户外 | 2026-03-30 | 正常使用 |"
     result = wm.archive_items_batch(conflict_md)
     print(f"冲突结果: {result}")
     # 应该返回 conflict 状态
@@ -493,10 +493,10 @@ if __name__ == "__main__":
     # ──────────────────────────────────────────────
     _print_section("Test 4: 多行批量归档")
     _create_dummy_image("./smart_wardrobe/temp_upload/temp_processing.jpg")
-    multi_md = """| 分类 | 衣物编号 | 主要颜色 | 材质 | 风格 | 适宜的温度 | 适合的场景 | 当日日期 |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 上衣 | AABB11223344 | 藏青色 | 纯棉 | 极简主义 | 18°C - 25°C | 日常工作 | 2026-03-30 |
-| 下装 | CCDD55667788 | 黑色 | 羊毛混纺 | 商务 | 10°C - 20°C | 职场通勤 | 2026-03-30 |"""
+    multi_md = """| 分类 | 衣物编号 | 衣物名称 | 主要颜色 | 材质 | 风格 | 适宜的温度 | 推荐季节 | 适合的场景 | 当日日期 | 衣物状态 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 上衣 | AABB11223344 | 藏青色衬衫 | 藏青色 | 纯棉 | 极简主义 | 18°C - 25°C | 春秋 | 日常工作 | 2026-03-30 | 正常使用 |
+| 下装 | CCDD55667788 | 黑色西裤 | 黑色 | 羊毛混纺 | 商务 | 10°C - 20°C | 秋季 | 职场通勤 | 2026-03-30 | 闲置中 |"""
     result = wm.archive_items_batch(multi_md)
     print(f"批量归档结果: {result}")
     assert os.path.isfile("./smart_wardrobe/wardrobe_data/AABB11223344.jpg"), "❌ 第一件归档失败"
@@ -510,7 +510,7 @@ if __name__ == "__main__":
     # ──────────────────────────────────────────────
     _print_section("Test 5: 编号格式异常")
     _create_dummy_image("./smart_wardrobe/temp_upload/temp_processing.jpg")
-    bad_md = "| 上衣 | SHORT | 白色 | 纯棉 | 极简 | 20°C | 休闲 | 2026-03-30 |"
+    bad_md = "| 上衣 | SHORT | 纯白T恤 | 白色 | 纯棉 | 极简 | 20°C | 春季 | 休闲 | 2026-03-30 | 正常使用 |"
     result = wm.archive_items_batch(bad_md)
     print(f"异常结果: {result}")
     assert result["results"][0]["status"] == "error", "❌ 未检测到编号格式异常"
